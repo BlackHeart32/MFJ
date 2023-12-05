@@ -1,19 +1,26 @@
 import axios from 'axios';
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Link} from 'react-router-dom';
 import { MdTextsms } from "react-icons/md";
 import {HiMail} from 'react-icons/hi'
 import {MongoClient, ObjectId} from 'mongodb'
 import './user.scss'
+import WorkoutDetails from './workoutdetails';
+
+const { screen, setScreen } = props;
 
 const LogIn = () => {
 
+
     return (
         <>
+
         <UserForm></UserForm>
         </>
     )
 }
+
+
 const mongoClient = new MongoClient(
     'mongodb+srv://eguzmandls:qivPxBAySCsC7hZx@mfj.fst9gm9.mongodb.net/?retryWrites=true&w=majority'
 )
@@ -42,6 +49,22 @@ const handleSubmit = (e) =>{
     .catch(err => console.log(err))
     
 }
+
+const readCookie = async () => {
+    try {
+      const res = await axios.get('/read-cookie');
+      
+      if (res.data.screen !== undefined) {
+        setScreen(res.data.screen);
+      }
+    } catch (e) {
+      setScreen('auth');
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    readCookie();
+  }, []);
 
 
 
@@ -77,6 +100,5 @@ const handleSubmit = (e) =>{
     </>)
 }
 
-//****** Server Comm ******/
 
 export default LogIn;
